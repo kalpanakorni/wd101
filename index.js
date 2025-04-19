@@ -1,9 +1,10 @@
+// JavaScript
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registrationForm");
   const tableBody = document.getElementById("userTableBody");
 
   // Load entries from localStorage on page load
-  const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+  let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
   storedUsers.forEach(user => addUserToTable(user));
 
   form.addEventListener("submit", (e) => {
@@ -28,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const user = { name, email, password, dob, acceptTerms };
+    const user = { name, email, dob, acceptTerms };
 
-    // Save to localStorage
+    // Update storedUsers and localStorage
     storedUsers.push(user);
     localStorage.setItem("users", JSON.stringify(storedUsers));
 
@@ -58,11 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
     row.innerHTML = `
       <td>${user.name}</td>
       <td>${user.email}</td>
-      <td>${user.password}</td>
       <td>${user.dob}</td>
       <td>${user.acceptTerms ? "Yes" : "No"}</td>
     `;
     tableBody.appendChild(row);
   }
 });
-
