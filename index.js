@@ -1,67 +1,64 @@
-// JavaScript
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("registrationForm");
-  const tableBody = document.getElementById("userTableBody");
 
-  // Load entries from localStorage on page load
-  let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-  storedUsers.forEach(user => addUserToTable(user));
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("registrationForm");
+      const tableBody = document.getElementById("userTableBody");
+      let storedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+      storedUsers.forEach(user => addUserToTable(user));
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const dob = document.getElementById("dob").value;
-    const acceptTerms = document.getElementById("acceptTerms").checked;
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    // Email validation
-    if (!validateEmail(email)) {
-      alert("Please enter a valid email address.");
-      return;
-    }
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const dob = document.getElementById("dob").value;
+        const acceptTerms = document.getElementById("acceptTerms").checked;
 
-    // Age validation
-    const age = getAge(new Date(dob));
-    if (age < 18 || age > 55) {
-      alert("Age must be between 18 and 55.");
-      return;
-    }
+        if (!validateEmail(email)) {
+          alert("Please enter a valid email address.");
+          return;
+        }
 
-    const user = { name, email, dob, acceptTerms };
+        const age = getAge(new Date(dob));
+        if (age < 18 || age > 55) {
+          alert("Age must be between 18 and 55.");
+          return;
+        }
 
-    // Update storedUsers and localStorage
-    storedUsers.push(user);
-    localStorage.setItem("users", JSON.stringify(storedUsers));
+        const user = { name, email, password, dob, acceptTerms };
 
-    addUserToTable(user);
-    form.reset();
-  });
+        storedUsers.push(user);
+        localStorage.setItem("users", JSON.stringify(storedUsers));
 
-  function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  }
+        addUserToTable(user);
+        form.reset();
+      });
 
-  function getAge(dob) {
-    const today = new Date();
-    let age = today.getFullYear() - dob.getFullYear();
-    const m = today.getMonth() - dob.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-      age--;
-    }
-    return age;
-  }
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
 
-  function addUserToTable(user) {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${user.name}</td>
-      <td>${user.email}</td>
-      <td>${user.dob}</td>
-      <td>${user.acceptTerms ? "Yes" : "No"}</td>
-    `;
-    tableBody.appendChild(row);
-  }
-});
+      function getAge(dob) {
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+          age--;
+        }
+        return age;
+      }
+
+      function addUserToTable(user) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.password}</td>
+          <td>${user.dob}</td>
+          <td>${user.acceptTerms}</td>
+        `;
+        tableBody.appendChild(row);
+      }
+    });
